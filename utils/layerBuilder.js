@@ -74,14 +74,20 @@ const layerBuilder = (baseLayer, dimensions) => {
                             newBrick.placeVertically(x, y)
                             newLayer.push(newBrick)
                         } else {
-                            // If it is not the last spor we check if the spot on the right is free and place a horizontal brick if it is
-                            // and vertical one if it is not
-                            if (isSpotFree("right", x, y, newLayer)) {
-                                newBrick.placeHorizontally(x, y)
-                                newLayer.push(newBrick)
-                            } else {
+                            // If the row is before the last we place the brick vertically
+                            if (isRowBeforeLast(rows, x)) {
                                 newBrick.placeVertically(x, y)
                                 newLayer.push(newBrick)
+                            } else {
+                                // If it is not the last spor we check if the spot on the right is free and place a horizontal brick if it is
+                                // and vertical one if it is not
+                                if (isSpotFree("right", x, y, newLayer)) {
+                                    newBrick.placeHorizontally(x, y)
+                                    newLayer.push(newBrick)
+                                } else {
+                                    newBrick.placeVertically(x, y)
+                                    newLayer.push(newBrick)
+                                }
                             }
                         }
                     }
@@ -179,7 +185,7 @@ function isFieldLast(cols, y1) {
 
 // Function to check if the last brick is vertical
 function isLastBrickVertical(baseLayer, cols, x) {
-    
+
     let result = false
     // Iterate through the bricks to find if there is any with coordinates that match the condition. 
     for (const brick of baseLayer) {
@@ -204,4 +210,8 @@ function areLastTwoVertical(baseLayer, cols, x) {
     return result1 && result2
 }
 
-
+// Function to check if the row is before the last row
+function isRowBeforeLast(rows, x) {
+    // Return current row X compared to the before last row 
+    return x === rows - 1
+}
